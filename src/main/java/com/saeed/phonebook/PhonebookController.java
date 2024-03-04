@@ -34,12 +34,12 @@ class PhonebookController {
         return phonebookService.create(phoneNumber);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/{name}")
     PhoneNumber update(@PathVariable String name, @RequestBody PhoneNumber phoneNumber) {
         return phonebookService.update(name, phoneNumber);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{name}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     void delete(@PathVariable String name) {
         phonebookService.delete(name);

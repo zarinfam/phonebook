@@ -3,6 +3,7 @@ package com.saeed.phonebook;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,12 +24,13 @@ class PhonebookService {
 
     @CachePut(value = "phonebook", key = "#phoneNumber.name")
     PhoneNumber create(PhoneNumber phoneNumber) {
-        return phonebookRepository.upsert(phoneNumber);
+        return phonebookRepository.insert(phoneNumber);
     }
 
-    @CachePut(value = "phonebook", key = "#name")
+    @Caching(put = @CachePut(value = "phonebook", key = "#phoneNumber.name"),
+            evict = @CacheEvict(value = "phonebook", key = "#name"))
     PhoneNumber update(String name, PhoneNumber phoneNumber) {
-        return phonebookRepository.upsert(new PhoneNumber(name, phoneNumber.number()));
+        return phonebookRepository.update(name, phoneNumber);
     }
 
     @CacheEvict(value = "phonebook")

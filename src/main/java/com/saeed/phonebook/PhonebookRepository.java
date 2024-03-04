@@ -15,15 +15,23 @@ class PhonebookRepository {
         return simulateDatabaseInteraction(() -> database.get(name), 1000L);
     }
 
-    PhoneNumber upsert(PhoneNumber phoneNumber) {
+    PhoneNumber insert(PhoneNumber phoneNumber) {
         return simulateDatabaseInteraction(() -> {
             database.put(phoneNumber.name(), phoneNumber);
             return phoneNumber;
         }, 500L);
     }
 
-    void delete(String name) {
-        simulateDatabaseInteraction(() -> database.remove(name), 200L);
+    PhoneNumber update(String name, PhoneNumber phoneNumber) {
+        return simulateDatabaseInteraction(() -> {
+            database.remove(name);
+            database.put(phoneNumber.name(), phoneNumber);
+            return phoneNumber;
+        }, 700L);
+    }
+
+    PhoneNumber delete(String name) {
+        return simulateDatabaseInteraction(() -> database.remove(name), 200L);
     }
 
     public List<PhoneNumber> findByNumber(String number) {
